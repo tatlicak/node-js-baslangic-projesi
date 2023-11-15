@@ -1,29 +1,7 @@
-const mongoose = require("mongoose")
+const router = require("express").Router();
 
-const userShema = new mongoose.Schema({
-    name: {
-        type:String,
-        required: true,
-        trim: true
-    },
-    lastname: {
-        type:String,
-        required: true,
-        trim: true
-    },
-    email: {
-        type: String,
-        required: true,
-        trim:true,
-        unique: true
-    },
-    password: {
-        type: String,
-        required: true,
-        trim: true
-    }
-},{collection:"users", timestamps: true});
+const auth = require("./auth.routes");
 
-const user = mongoose.model("users", userShema);
+router.use(auth);
 
-module.exports = user;
+module.exports = router;
