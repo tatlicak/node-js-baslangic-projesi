@@ -49,6 +49,39 @@ class AuthValidation {
         }
         next();
     }
+
+
+    static login = async (req,res, next) => {
+        try {
+                await joi.object({
+                    email: joi.string().email().trim().min(3).max(50).required().messages({
+                        "string.base" : "E-posta Alanı Normal Metin Olmalıdır",
+                        "string.empty" : "E-posta Alanı Boş Olamaz",
+                        "string.min" : "E-posta Alanı En Az 3 Karakter Olmalıdır ",
+                        "string.email": "Lütfen Geçerli Bir E-posta Adresi Giriniz",
+                        "string.max" : "E-posta Alanı En Fazla 50 Karakter Olabilir",
+                        "string.required" : "E-posta Alanı Zorunludur"
+    
+                    }),
+                    password: joi.string().trim().min(8).max(36).required().messages({
+                        "string.base" : "Şifre Alanı Normal Metin Olmalıdır",
+                        "string.empty" : "Şifre Alanı Boş Olamaz",
+                        "string.min" : "Şifre Alanı En Az 8 Karakter Olmalıdır ",
+                        "string.max" : "Şifre Alanı En Fazla 36 Karakter Olabilir",
+                        "string.required" : "Şifre Alanı Zorunludur"
+    
+                    })
+                }).validateAsync(req.body)
+
+
+        } catch (error) {
+            if(error.details && error?.details[0].message)
+                throw new APIError(error.details[0].message, 400);
+            else throw new APIError("Lütfen Validasyon Kurallarına Uyun...", 400);
+            console.log(error.detail[0]);
+        }
+        next();
+    }
     }
 
     module.exports = AuthValidation;

@@ -2,12 +2,28 @@ const user = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const APIError = require("../utils/errors");
 const Response = require("../utils/response");
+const { createToken } = require("../middlewares/auth");
 
 const login = async (req,res) => {
-    console.log(req.body);
+    const {email, password} = req.body;
+    
+    const userInfo = await user.findOne({email});
+    console.log(userInfo);
 
-    return res.json(req.body);
+    if(!userInfo) {
+        throw new APIError("Email yada Şifre Hatalıdır !",401);
+    }
+
+    const isPassTrue = await bcrypt.compare(password, userInfo.password);
+
+    if(!isPassTrue) {
+        throw new APIError("Email veya Şifre Hatalıdır !",401);
+    }
+
+
+    createToken(userInfo, res);
 }
+
 
 const register = async (req,res) => {
 
