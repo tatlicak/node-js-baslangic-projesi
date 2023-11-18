@@ -5,10 +5,11 @@ const Response = require("../utils/response");
 const { createToken } = require("../middlewares/auth");
 
 const login = async (req,res) => {
+
+    console.log("LOGIN");
     const {email, password} = req.body;
     
     const userInfo = await user.findOne({email});
-    console.log(userInfo);
 
     if(!userInfo) {
         throw new APIError("Email yada Şifre Hatalıdır !",401);
@@ -62,7 +63,15 @@ const register = async (req,res) => {
 
 }
 
+const me = async (req, res) => {
+    
+    return new Response(req.user).success(res);
+}
+
+
+
 module.exports = {
     login,
-    register
+    register,
+    me
 }

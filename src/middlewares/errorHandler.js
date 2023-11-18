@@ -10,7 +10,8 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     }
     return res.status(500).json({
         success: false,
-        message: "Error occured with api. Please control your API !"
+        message: "Error occured with api. Please control your API !",
+        original: err.message
     })
 }
 
